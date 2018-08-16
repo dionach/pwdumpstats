@@ -258,6 +258,7 @@ if args.show_full:
         print(col.red + "[+] Username == Password " + col.blue + "[" + str(len(userpass)) + "]" + col.end)
         for user in sorted(userpass, key=lambda s: s.lower()):
             print(user)
+        print("")
 
 if args.show_noncomplex and len(noncomplex) > 0:
     print(col.red + "[+] Non-complex Passwords (" + str(len(noncomplex)) +")" + col.end)
