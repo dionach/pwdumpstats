@@ -108,10 +108,14 @@ try:
     with open(pot_path) as potfile:
         for line in potfile:
             line = line.rstrip()
-            m = re.match("\$NT\$([a-fA-F0-9]{32}):(.*)$", line)
+            m = re.match('(\$NT\$([a-fA-F0-9]{32}):(.*)$)|(^([0-9a-fA-F]{32}):(.*)$)', line)
             if m:
-                hash = m.group(1).upper()
-                pw = m.group(2)
+                if m.group(5):      # hashcat potfile format
+                    hash = m.group(5).upper()
+                    pw = m.group(6)
+                else:               # john potfile format
+                    hash = m.group(2).upper()
+                    pw = m.group(3)
                 if hash == '31D6CFE0D16AE931B73C59D7E0C089C0':
                     pw = ""
                 pot[hash] = pw
