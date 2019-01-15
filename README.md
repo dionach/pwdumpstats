@@ -1,5 +1,5 @@
 # pwdumpstats
-pwdumpstats is a python script to generate statistics from a pwdump file, including around the use of duplicate passwords. It can also read passwords cracked using John the Ripper, to show the most common weak passwords in use.
+pwdumpstats is a python script to generate statistics from a pwdump file, including around the use of duplicate passwords. It can also read passwords cracked using John the Ripper or hashcat, to show the most common weak passwords in use.
 
 Although it will work with any pwdump file (or even a simpler username:hash file), it is best used with the output of [NtdsAudit](https://github.com/Dionach/ntdsaudit), which will allow it to output more stats, such as those related to inactive and administrative accounts.
 
@@ -7,7 +7,7 @@ Comments and pull requests are welcome.
 
 ## Usage
 
-pwdumpstats will try and find John's pot file (which contains the cracked passwords) by looking in the `$JOHN` environment variable. If this isn't set, you can manually pass the pot file to it with `--pot`.
+pwdumpstats will try and find John's pot file (which contains the cracked passwords) by looking in the `$JOHN` environment variable. If this isn't set, you can manually pass the pot file to it with `--pot`. It also supports pot files in from hashcat, and potentially other tools as long as they use the same formatting.
 
 ```
 usage: pwdumpstats.py [options] <pwdumpfile>
@@ -24,7 +24,7 @@ optional arguments:
   -c, --cracked                         Only print cracked hashes
   -d, --domain                          Print domains
   -D, --disabled                        Include disabled accounts
-  -p POT_FILE, --pot POT_FILE           Specify pot file
+  -p POT_FILE, --pot POT_FILE           Specify pot file (john or hashcat format)
   -m, --mask                            Mask passwords and hashes in output
   -l, --lm                              Show accounts with LM hashes
 ```
