@@ -62,7 +62,7 @@ parser.add_argument('-E', '--empty', help='List users with empty passwords', act
 parser.add_argument('-c', '--cracked', help='Only print cracked hashes', action='store_true', default=False, dest='cracked_only', required=False)
 parser.add_argument('-d', '--domain', help='Print domains', action='store_true', default=False, dest='domain', required=False)
 parser.add_argument('-D', '--disabled', help='Include disabled accounts', action='store_true', default=False, dest='disabled', required=False)
-parser.add_argument('-p', '--pot', help='Specify pot file', default='$JOHN/john.pot', dest='pot_file', required=False)
+parser.add_argument('-p', '--pot', help='Specify pot file (john or hashcat format)', default='$JOHN/john.pot', dest='pot_file', required=False)
 parser.add_argument('-m', '--mask', help='Mask passwords and hashes in output', action='store_true', default=False, dest='mask', required=False)
 parser.add_argument('-l', '--lm', help='Show accounts with LM hashes', action='store_true', default=False, dest='show_lm', required=False)
 parser.add_argument("files", nargs="+", help="Hash files")
