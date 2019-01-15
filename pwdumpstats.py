@@ -44,7 +44,10 @@ def print_percent(percent):
     return out
 
 def mask(s):
-    return s[:2] + '*' * (len(s) - 4) + s[-2:]
+    if args.mask:
+        return s[:2] + '*' * (len(s) - 4) + s[-2:]
+    else:
+        return s
 
 
 ########
@@ -196,10 +199,7 @@ for filename in args.files:
                     # Admin
                     if admin == 1:
                         admins.add(user)
-                        if args.mask:
-                            crackedadmins.add(user + ":" + mask(pot[hash]))
-                        else:
-                            crackedadmins.add(user + ":" + pot[hash])
+                        crackedadmins.add(user + ":" + mask(pot[hash]))
 
                 if not args.filter_file or user.lower() in map(str.lower, filterlist) :
                     hashlist.append(hash)
@@ -224,19 +224,16 @@ for hash,users in sorted(hashlist_user.items()):
         if hash in pot:
             if pot[hash] == "":
                 pw = col.red + "[empty]" + col.end
+                hash = mask(hash)
             else:
-                if args.mask:
-                    pw = mask(pot[hash])
-                    hash = mask(hash)
-                else:
-                    pw = pot[hash]
+                pw = mask(pot[hash])
+                hash = mask(hash)
             print(col.green + hash + " : " + pw + col.blue + \
                     " [" + str(dupecount) + "]" + col.end)
         elif args.cracked_only:
             continue
         else:
-            if args.mask:
-                hash = mask(hash)
+            hash = mask(hash)
             print(col.brown + hash + col.blue + " [" + str(dupecount) \
                     + "]" + col.end)
         usorted = sorted(users, key = lambda s: s.lower())
@@ -351,18 +348,13 @@ for hash,count in sorted(hashcount.items(), key=lambda x: x[1], reverse=True)[:2
     if hash in pot:
         if pot[hash] == "":
             pw = col.red + "[empty]" + col.end
-            if args.mask:
-                hash = mask(hash)
+            hash = mask(hash)
         else:
-            if args.mask:
-                pw = mask(pot[hash])
-                hash = mask(hash)
-            else:
-                pw = pot[hash]
+            pw = mask(pot[hash])
+            hash = mask(hash)
         print(str(count) + "\t" + hash + "\t" + pw)
     else:
-        if args.mask:
-            hash = mask(hash)
+        hash = mask(hash)
         print(str(count) + "\t" + hash + "\t" + col.green + "[uncracked]" + col.end)
 
 if sys.stdout.isatty():
