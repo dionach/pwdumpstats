@@ -109,9 +109,10 @@ if args.filter_file:
             filterlist.add(line)
 try:
     with open(pot_path) as potfile:
+        hashregex = re.compile('(^(\$NT\$)?([a-fA-F0-9]{32}):(.*)$)')
         for line in potfile:
             line = line.rstrip()
-            m = re.match('(^(\$NT\$)?([a-fA-F0-9]{32}):(.*)$)', line)
+            m = hashregex.match(line)
             if m:
                 hash = m.group(3).upper()
                 pw = m.group(4)
