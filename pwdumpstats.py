@@ -108,7 +108,7 @@ if args.filter_file:
             line = line.rstrip()
             filterlist.add(line)
 try:
-    with open(pot_path) as potfile:
+    with open(pot_path, encoding="utf8", errors='replace') as potfile:
         hashregex = re.compile('(^(\$NT\$)?([a-fA-F0-9]{32}):(.*)$)')
         for line in potfile:
             line = line.rstrip()
