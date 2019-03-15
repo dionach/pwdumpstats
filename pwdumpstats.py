@@ -3,6 +3,7 @@
 from __future__ import print_function
 
 import argparse
+import io
 import platform
 import re
 import os
@@ -105,12 +106,12 @@ domainadmins = []
 enterpriseadmins = []
 
 if args.filter_file:
-    with open(args.filter_file) as infile:
+    with io.open(args.filter_file, encoding="utf8", errors='replace') as infile:
         for line in infile:
             line = line.rstrip()
             filterlist.add(line)
 try:
-    with open(pot_path, encoding="utf8", errors='replace') as potfile:
+    with io.open(pot_path, encoding="utf8", errors='replace') as potfile:
         hashregex = re.compile('(^(\$NT\$)?([a-fA-F0-9]{32}):(.*)$)')
         for line in potfile:
             line = line.rstrip()
@@ -129,7 +130,7 @@ if not pot:
 
 
 for filename in args.files:
-    with open(filename) as userfile:
+    with io.open(filename, encoding="utf8", errors='replace') as userfile:
         for line in userfile:
             if not args.disabled:
                 if "Disabled=1" in line or "Disabled=True" in line or ",Expired=True" in line:
