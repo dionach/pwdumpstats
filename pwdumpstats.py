@@ -10,7 +10,7 @@ import os
 import subprocess
 import sys
 
-__version__ = 1.1
+__version__ = '1.1'
 
 # Usage:
 # $ pwdumpstats.py <hashfile>
@@ -57,7 +57,8 @@ def mask(s):
 # Main #
 ########
 
-parser = argparse.ArgumentParser('pwdumpstats.py', formatter_class=lambda prog:argparse.HelpFormatter(prog,max_help_position=40))
+parser = argparse.ArgumentParser('pwdumpstats.py', description='pwdumpstats version ' + __version__, formatter_class=lambda prog:argparse.HelpFormatter(prog,max_help_position=40))
+parser.add_argument('--version', help="prints the current program version", action='version', version='%(prog)s '+__version__)
 parser.add_argument('-f', '--filter', help='Filter users', dest='filter_file', required=False)
 parser.add_argument('-H', '--history', help='Include password history hashes', action='store_true', default=False, dest='history', required=False)
 parser.add_argument('-s', '--show', help='Show full re-use output', action='store_true', default=False, dest='show_full', required=False)
@@ -72,12 +73,13 @@ parser.add_argument('-p', '--pot', help='Specify pot file (john or hashcat forma
 parser.add_argument('-m', '--mask', help='Mask passwords and hashes in output', action='store_true', default=False, dest='mask', required=False)
 parser.add_argument('-l', '--lm', help='Show accounts with LM hashes', action='store_true', default=False, dest='show_lm', required=False)
 parser.add_argument("files", nargs="+", help="Hash files")
-args = parser.parse_args()
 
 # Usage
-if len(sys.argv) < 1:
+if len(sys.argv) < 2:
     parser.print_help()
     sys.exit(1)
+
+args = parser.parse_args()
 
 if args.filter_file:
     args.show_full = True
