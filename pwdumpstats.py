@@ -205,7 +205,7 @@ for filename in args.files:
                         admins.add(user)
                         crackedadmins.add(user + ":" + mask(pot[hash]))
 
-                if not args.filter_file or user.lower() in map(str.lower, filterlist) :
+                if not args.filter_file or user.lower() in map(unicode.lower, filterlist) :
                     hashlist.append(hash)
 
 # Reverse the dictionary
@@ -216,7 +216,7 @@ for key, value in users.items():
 for hash,users in sorted(hashlist_user.items()):
     dupecount = len(users)
     if args.filter_file:
-        if not set(map(str.lower, users)) & set(map(str.lower, filterlist)):
+        if not set(map(unicode.lower, users)) & set(map(unicode.lower, filterlist)):
             continue
     if dupecount == 1:
         continue
@@ -242,12 +242,12 @@ for hash,users in sorted(hashlist_user.items()):
                     + "]" + col.end)
         usorted = sorted(users, key = lambda s: s.lower())
         for user in usorted:
-            if args.filter_file and user.lower() in map(str.lower, filterlist):
+            if args.filter_file and user.lower() in map(unicode.lower, filterlist):
                 print(col.red + user + col.end) # Filtered users in red
             elif "__history_" in user.lower():
                     print(col.grey + user + col.end)
             else:
-                if user.lower() in map(str.lower, admins):
+                if user.lower() in map(unicode.lower, admins):
                     print(col.red + user + col.end) # Admins in red
                 else:
                     print(user)
