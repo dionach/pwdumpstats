@@ -84,7 +84,6 @@ args = parser.parse_args()
 if args.filter_file:
     args.show_full = True
 
-# If your environment is badly set up you may need to change this
 hashlist = []
 filterlist = set()
 crackedadmins = set()
@@ -121,6 +120,7 @@ else:
         if os.path.isfile(path):
             pot_path = path
             print('Using potfile: ' + pot_path)
+            break
     if not pot_path:
         print(col.red + "Could not find a pot file. Please specify one with --pot" + col.end)
         sys.exit(1)
@@ -141,7 +141,7 @@ except IOError:
     print(col.red + "Could not open pot file: " + pot_path + col.end)
     sys.exit(1)
 if not pot:
-    print(col.red + "[-] Empty pot file specified\n" + col.end)
+    print(col.red + "[-] Pot doesn't contain any NTLM hashes\n" + col.end)
 
 
 for filename in args.files:
@@ -222,6 +222,10 @@ for filename in args.files:
 
                 if not args.filter_file or user.lower() in map(unicode.lower, filterlist) :
                     hashlist.append(hash)
+
+if not users:
+        print(col.red + "[-] No hashes loaded from " + ' '.join(map(str, args.files)) + col.end)
+        sys.exit(1)
 
 # Reverse the dictionary
 hashlist_user = {}
