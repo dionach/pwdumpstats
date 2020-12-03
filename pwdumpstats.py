@@ -69,7 +69,7 @@ parser.add_argument('-E', '--empty', help='List users with empty passwords', act
 parser.add_argument('-c', '--cracked', help='Only print cracked hashes', action='store_true', default=False, dest='cracked_only', required=False)
 parser.add_argument('-d', '--domain', help='Print domains', action='store_true', default=False, dest='domain', required=False)
 parser.add_argument('-D', '--disabled', help='Include disabled accounts', action='store_true', default=False, dest='disabled', required=False)
-parser.add_argument('-p', '--pot', help='Specify pot file (john or hashcat format)', default='$JOHN/john.pot', dest='pot_file', required=False)
+parser.add_argument('-p', '--pot', help='Specify pot file (john or hashcat format)', dest='pot_file', required=False)
 parser.add_argument('-m', '--mask', help='Mask passwords and hashes in output', action='store_true', default=False, dest='mask', required=False)
 parser.add_argument('-l', '--lm', help='Show accounts with LM hashes', action='store_true', default=False, dest='show_lm', required=False)
 parser.add_argument("files", nargs="+", help="Hash files")
@@ -84,8 +84,6 @@ args = parser.parse_args()
 if args.filter_file:
     args.show_full = True
 
-# If your environment is badly set up you may need to change this
-pot_path = os.path.expandvars(args.pot_file)
 hashlist = []
 filterlist = set()
 crackedadmins = set()
@@ -112,6 +110,21 @@ if args.filter_file:
         for line in infile:
             line = line.rstrip()
             filterlist.add(line)
+
+if args.pot_file:
+    pot_path = args.pot_file
+else:
+    common_paths = ['john.pot', '$JOHN/john.pot', '~/.john/john.pot', 'hashcat.potfile']
+    for path in common_paths:
+        path = os.path.expandvars(os.path.expanduser(path))
+        if os.path.isfile(path):
+            pot_path = path
+            print('Using potfile: ' + pot_path)
+            break
+    if not pot_path:
+        print(col.red + "Could not find a pot file. Please specify one with --pot" + col.end)
+        sys.exit(1)
+
 try:
     with io.open(pot_path, encoding="utf8", errors='replace') as potfile:
         hashregex = re.compile('(^(\$NT\$)?([a-fA-F0-9]{32}):(.*)$)')
@@ -125,10 +138,10 @@ try:
                     pw = ""
                 pot[hash] = pw
 except IOError:
-    print(col.red + "Could not open pot file" + col.end)
+    print(col.red + "Could not open pot file: " + pot_path + col.end)
     sys.exit(1)
 if not pot:
-    print(col.red + "[-] Empty pot file specified\n" + col.end)
+    print(col.red + "[-] Pot doesn't contain any NTLM hashes\n" + col.end)
 
 
 for filename in args.files:
@@ -209,6 +222,10 @@ for filename in args.files:
 
                 if not args.filter_file or user.lower() in map(unicode.lower, filterlist) :
                     hashlist.append(hash)
+
+if not users:
+        print(col.red + "[-] No hashes loaded from " + ' '.join(map(str, args.files)) + col.end)
+        sys.exit(1)
 
 # Reverse the dictionary
 hashlist_user = {}
