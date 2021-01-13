@@ -27,6 +27,7 @@ optional arguments:
   -p POT_FILE, --pot POT_FILE           Specify pot file (john or hashcat format)
   -m, --mask                            Mask passwords and hashes in output
   -l, --lm                              Show accounts with LM hashes
+  -M, --mindupecount <num>              Only show passwords with more than <num> users
 ```
 
 

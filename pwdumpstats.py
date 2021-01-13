@@ -72,6 +72,7 @@ parser.add_argument('-D', '--disabled', help='Include disabled accounts', action
 parser.add_argument('-p', '--pot', help='Specify pot file (john or hashcat format)', dest='pot_file', required=False)
 parser.add_argument('-m', '--mask', help='Mask passwords and hashes in output', action='store_true', default=False, dest='mask', required=False)
 parser.add_argument('-l', '--lm', help='Show accounts with LM hashes', action='store_true', default=False, dest='show_lm', required=False)
+parser.add_argument('-M', '--mindupecount', help='Don\'t show hashes with less that mindupecount users', type=int, default=False, dest='mindupecount', required=False)
 parser.add_argument("files", nargs="+", help="Hash files")
 
 # Usage
@@ -243,7 +244,12 @@ for hash,users in sorted(hashlist_user.items()):
         maxdupe = dupecount
     totaldupes += dupecount
     hashcount[hash] = dupecount
+
+for hash,count in sorted(hashcount.items(), key=lambda x: x[1], reverse=True):
     if args.show_full:
+        if args.mindupecount:
+            if count < args.mindupecount:
+                continue
         if hash in pot:
             if pot[hash] == "":
                 pw = col.red + "[empty]" + col.end
@@ -252,13 +258,14 @@ for hash,users in sorted(hashlist_user.items()):
                 pw = mask(pot[hash])
                 hash = mask(hash)
             print(col.green + hash + " : " + pw + col.blue + \
-                    " [" + str(dupecount) + "]" + col.end)
+                    " [" + str(count) + "]" + col.end)
         elif args.cracked_only:
             continue
         else:
             hash = mask(hash)
-            print(col.brown + hash + col.blue + " [" + str(dupecount) \
+            print(col.brown + hash + col.blue + " [" + str(count) \
                     + "]" + col.end)
+        users = hashlist_user[hash]
         usorted = sorted(users, key = lambda s: s.lower())
         for user in usorted:
             if args.filter_file and user.lower() in map(unicode.lower, filterlist):
