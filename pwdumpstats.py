@@ -251,6 +251,7 @@ for hash,count in sorted(hashcount.items(), key=lambda x: x[1], reverse=True):
             if count < args.mindupecount:
                 continue
         if hash in pot:
+            users = hashlist_user[hash]
             if pot[hash] == "":
                 pw = col.red + "[empty]" + col.end
                 hash = mask(hash)
@@ -265,7 +266,6 @@ for hash,count in sorted(hashcount.items(), key=lambda x: x[1], reverse=True):
             hash = mask(hash)
             print(col.brown + hash + col.blue + " [" + str(count) \
                     + "]" + col.end)
-        users = hashlist_user[hash]
         usorted = sorted(users, key = lambda s: s.lower())
         for user in usorted:
             if args.filter_file and user.lower() in map(unicode.lower, filterlist):
