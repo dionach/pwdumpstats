@@ -367,9 +367,9 @@ if crackedadmins:
     print("Cracked admin passwords " + col.blue + str(len(crackedadmins)) + print_percent(crackedadminspercent) + col.end)
 if len(administrators) > 0:
     print("Administrators:         " + col.blue + str(len(administrators)) + col.end)
-if len(domainadmins) > 1:
+if len(domainadmins) > 0:
     print("Domain Admins:          " + col.blue + str(len(domainadmins)) + col.end)
-if len(enterpriseadmins) > 1:
+if len(enterpriseadmins) > 0:
     print("Enterprise Admins       " + col.blue + str(len(enterpriseadmins)) + col.end)
 
 
