@@ -251,6 +251,7 @@ for hash,count in sorted(hashcount.items(), key=lambda x: x[1], reverse=True):
             if count < args.mindupecount:
                 continue
         if hash in pot:
+            users = hashlist_user[hash]
             if pot[hash] == "":
                 pw = col.red + "[empty]" + col.end
                 hash = mask(hash)
@@ -265,7 +266,6 @@ for hash,count in sorted(hashcount.items(), key=lambda x: x[1], reverse=True):
             hash = mask(hash)
             print(col.brown + hash + col.blue + " [" + str(count) \
                     + "]" + col.end)
-        users = hashlist_user[hash]
         usorted = sorted(users, key = lambda s: s.lower())
         for user in usorted:
             if args.filter_file and user.lower() in map(unicode.lower, filterlist):
@@ -367,9 +367,9 @@ if crackedadmins:
     print("Cracked admin passwords " + col.blue + str(len(crackedadmins)) + print_percent(crackedadminspercent) + col.end)
 if len(administrators) > 0:
     print("Administrators:         " + col.blue + str(len(administrators)) + col.end)
-if len(domainadmins) > 1:
+if len(domainadmins) > 0:
     print("Domain Admins:          " + col.blue + str(len(domainadmins)) + col.end)
-if len(enterpriseadmins) > 1:
+if len(enterpriseadmins) > 0:
     print("Enterprise Admins       " + col.blue + str(len(enterpriseadmins)) + col.end)
 
 
