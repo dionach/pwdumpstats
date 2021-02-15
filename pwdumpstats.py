@@ -250,8 +250,8 @@ for hash,count in sorted(hashcount.items(), key=lambda x: x[1], reverse=True):
         if args.mindupecount:
             if count < args.mindupecount:
                 continue
+        users = hashlist_user[hash]
         if hash in pot:
-            users = hashlist_user[hash]
             if pot[hash] == "":
                 pw = col.red + "[empty]" + col.end
                 hash = mask(hash)
