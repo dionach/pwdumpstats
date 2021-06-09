@@ -196,8 +196,12 @@ for filename in args.files:
                 users[user] = hash
                 if hash in pot:
                     crackedcount += 1
-                    if user == pot[hash]:
-                        userpass.append(user)
+                    if args.domain:
+                        if user.split('\\')[1] == pot[hash]:
+                            userpass.append(user)
+                    else:
+                        if user == pot[hash]:
+                            userpass.append(user)
                     # Complexity
                     if len(pot[hash]) == 0:
                         empty.append(user)
