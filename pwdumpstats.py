@@ -196,8 +196,12 @@ for filename in args.files:
                 users[user] = hash
                 if hash in pot:
                     crackedcount += 1
-                    if user == pot[hash]:
-                        userpass.append(user)
+                    if args.domain:
+                        if user.split('\\')[1] == pot[hash]:
+                            userpass.append(user)
+                    else:
+                        if user == pot[hash]:
+                            userpass.append(user)
                     # Complexity
                     if len(pot[hash]) == 0:
                         empty.append(user)
@@ -373,19 +377,20 @@ if len(enterpriseadmins) > 0:
     print("Enterprise Admins       " + col.blue + str(len(enterpriseadmins)) + col.end)
 
 
-print(col.brown + "\nTop 20 hashes\n" + col.end)
-for hash,count in sorted(hashcount.items(), key=lambda x: x[1], reverse=True)[:20]:
-    if hash in pot:
-        if pot[hash] == "":
-            pw = col.red + "[empty]" + col.end
-            hash = mask(hash)
+if top20:
+    print(col.brown + "\nTop 20 hashes\n" + col.end)
+    for hash,count in sorted(hashcount.items(), key=lambda x: x[1], reverse=True)[:20]:
+        if hash in pot:
+            if pot[hash] == "":
+                pw = col.red + "[empty]" + col.end
+                hash = mask(hash)
+            else:
+                pw = mask(pot[hash])
+                hash = mask(hash)
+            print(str(count) + "\t" + hash + "\t" + pw)
         else:
-            pw = mask(pot[hash])
             hash = mask(hash)
-        print(str(count) + "\t" + hash + "\t" + pw)
-    else:
-        hash = mask(hash)
-        print(str(count) + "\t" + hash + "\t" + col.green + "[uncracked]" + col.end)
+            print(str(count) + "\t" + hash + "\t" + col.green + "[uncracked]" + col.end)
 
 if sys.stdout.isatty():
     print("")
